@@ -4,6 +4,7 @@ import { users } from '../../db/schema/users'
 import { eq, or } from 'drizzle-orm'
 import bcrypt from 'bcrypt'
 import type { RegisterRoute } from '../../types/elysia-route-types'
+import { userSchema, errorSchema } from '../../types/swagger-schemas'
 
 export const register = new Elysia()
   .post('/register', async ({ body, set }: RegisterRoute) => {
@@ -70,8 +71,46 @@ export const register = new Elysia()
     }
   }, {
     body: t.Object({
-      username: t.String(),
-      email: t.String(),
-      password: t.String()
-    })
+      username: t.String({ minLength: 3, maxLength: 50 }),
+      email: t.String({ format: 'email' }),
+      password: t.String({ minLength: 6 })
+    }),
+    detail: {
+      tags: ['Auth'],
+      summary: 'Registrar un nuevo usuario',
+      description: 'Crea una nueva cuenta de usuario en el sistema',
+      responses: {
+        200: {
+          description: 'Usuario registrado correctamente',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  success: { type: 'boolean', default: true },
+                  message: { type: 'string' },
+                  user: userSchema
+                }
+              }
+            }
+          }
+        },
+        400: {
+          description: 'Datos de registro inválidos',
+          content: {
+            'application/json': {
+              schema: errorSchema
+            }
+          }
+        },
+        500: {
+          description: 'Error del servidor',
+          content: {
+            'application/json': {
+              schema: errorSchema
+            }
+          }
+        }
+      }
+    }
   }) 

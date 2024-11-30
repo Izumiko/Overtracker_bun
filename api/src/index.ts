@@ -10,6 +10,18 @@ declare module 'elysia' {
   interface ElysiaConfig {
     'jwt': typeof jwt
   }
+
+  interface SecurityScheme {
+    [key: string]: any[]
+  }
+
+  interface SwaggerDetail {
+    tags?: string[]
+    summary?: string
+    description?: string
+    security?: SecurityScheme[]
+    responses: Record<number, SwaggerResponse>
+  }
 }
 
 const app = new Elysia()
@@ -20,10 +32,24 @@ const app = new Elysia()
   .use(swagger({
     documentation: {
       info: {
-        title: 'API de OPTracker',
+        title: 'API de OverTracker',
         version: '1.0.0',
         description: 'API para el tracker de torrents privado'
-      }
+      },
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+          }
+        }
+      },
+      security: [
+        {
+          bearerAuth: []
+        }
+      ]
     }
   }))
   .use(jwt({

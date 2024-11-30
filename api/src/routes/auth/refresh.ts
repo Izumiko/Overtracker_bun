@@ -4,6 +4,7 @@ import { users, refreshTokens } from '../../db/schema/users'
 import { eq, and, lt } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
 import type { RefreshRoute } from '../../types/elysia-route-types'
+import { userSchema, errorSchema } from '../../types/swagger-schemas'
 
 export const refresh = new Elysia()
   .post('/refresh', async ({ body, set, jwt }: RefreshRoute) => {
@@ -89,5 +90,43 @@ export const refresh = new Elysia()
   }, {
     body: t.Object({
       refresh_token: t.String()
-    })
+    }),
+    detail: {
+      tags: ['Auth'],
+      summary: 'Refrescar token de acceso',
+      description: 'Genera un nuevo token de acceso usando un refresh token válido',
+      responses: {
+        200: {
+          description: 'Token refrescado correctamente',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  success: { type: 'boolean', default: true },
+                  access_token: { type: 'string' },
+                  refresh_token: { type: 'string' }
+                }
+              }
+            }
+          }
+        },
+        401: {
+          description: 'Token de refresco inválido o expirado',
+          content: {
+            'application/json': {
+              schema: errorSchema
+            }
+          }
+        },
+        500: {
+          description: 'Error del servidor',
+          content: {
+            'application/json': {
+              schema: errorSchema
+            }
+          }
+        }
+      }
+    }
   }) 

@@ -3,6 +3,7 @@ import { db } from '../../db'
 import { refreshTokens } from '../../db/schema/users'
 import { eq } from 'drizzle-orm'
 import type { LogoutRoute } from '../../types/elysia-route-types'
+import { errorSchema } from '../../types/swagger-schemas'
 
 export const logout = new Elysia()
   .post('/logout', async ({ jwt, set, headers }: LogoutRoute) => {
@@ -45,6 +46,45 @@ export const logout = new Elysia()
       return {
         success: false,
         message: 'Error al cerrar sesión'
+      }
+    }
+  }, {
+    detail: {
+      tags: ['Auth'],
+      summary: 'Cerrar sesión',
+      description: 'Invalida el token de acceso y elimina los refresh tokens del usuario',
+      security: [{ bearerAuth: [] }],
+      responses: {
+        200: {
+          description: 'Sesión cerrada correctamente',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  success: { type: 'boolean', default: true },
+                  message: { type: 'string' }
+                }
+              }
+            }
+          }
+        },
+        401: {
+          description: 'Token no proporcionado o inválido',
+          content: {
+            'application/json': {
+              schema: errorSchema
+            }
+          }
+        },
+        500: {
+          description: 'Error del servidor',
+          content: {
+            'application/json': {
+              schema: errorSchema
+            }
+          }
+        }
       }
     }
   }) 

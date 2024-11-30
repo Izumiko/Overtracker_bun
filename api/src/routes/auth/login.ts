@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm'
 import bcrypt from 'bcrypt'
 import { randomUUID } from 'crypto'
 import type { LoginRoute } from '../../types/elysia-route-types'
+import { userSchema, errorSchema } from '../../types/swagger-schemas'
 
 export const login = new Elysia()
   .post('/login', async ({ body, set, jwt }: LoginRoute) => {
@@ -87,5 +88,45 @@ export const login = new Elysia()
     body: t.Object({
       username: t.String(),
       password: t.String()
-    })
+    }),
+    detail: {
+      tags: ['Auth'],
+      summary: 'Iniciar sesión',
+      description: 'Autentica un usuario y devuelve los tokens de acceso',
+      responses: {
+        200: {
+          description: 'Login exitoso',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  success: { type: 'boolean', default: true },
+                  message: { type: 'string' },
+                  user: userSchema,
+                  access_token: { type: 'string' },
+                  refresh_token: { type: 'string' }
+                }
+              }
+            }
+          }
+        },
+        401: {
+          description: 'Credenciales inválidas',
+          content: {
+            'application/json': {
+              schema: errorSchema
+            }
+          }
+        },
+        500: {
+          description: 'Error del servidor',
+          content: {
+            'application/json': {
+              schema: errorSchema
+            }
+          }
+        }
+      }
+    }
   }) 

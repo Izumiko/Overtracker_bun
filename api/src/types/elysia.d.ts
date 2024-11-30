@@ -26,10 +26,44 @@ declare module 'elysia' {
 
   export type RouteHandler = (context: Context) => any | Promise<any>
 
+  interface SwaggerSchema {
+    type: string
+    properties?: Record<string, any>
+    items?: SwaggerSchema
+    format?: string
+    enum?: string[]
+    nullable?: boolean
+    default?: any
+    minLength?: number
+    maxLength?: number
+  }
+
+  interface SwaggerResponse {
+    description: string
+    content?: {
+      'application/json': {
+        schema: SwaggerSchema
+      }
+    }
+  }
+
+  interface SecurityScheme {
+    [key: string]: any[]
+  }
+
+  interface SwaggerDetail {
+    tags?: string[]
+    summary?: string
+    description?: string
+    security?: SecurityScheme[]
+    responses: Record<number, SwaggerResponse>
+  }
+
   export interface RouteConfig {
     body?: any
     query?: any
     params?: any
+    detail?: SwaggerDetail
   }
 
   export const t: {
@@ -70,6 +104,12 @@ declare module '@elysiajs/jwt' {
 declare module '@elysiajs/swagger' {
   import type { Elysia } from 'elysia'
 
+  interface SecurityScheme {
+    type: string
+    scheme?: string
+    bearerFormat?: string
+  }
+
   export function swagger(options?: {
     documentation?: {
       info?: {
@@ -84,6 +124,14 @@ declare module '@elysiajs/swagger' {
       servers?: Array<{
         url: string
         description?: string
+      }>
+      components?: {
+        securitySchemes?: {
+          [key: string]: SecurityScheme
+        }
+      }
+      security?: Array<{
+        [key: string]: string[]
       }>
     }
   }): (app: Elysia) => Elysia
