@@ -15,5 +15,13 @@ export const users = pgTable('users', {
   updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow()
 })
 
+export const refreshTokens = pgTable('refresh_tokens', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  user_id: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  token: text('token').notNull().unique(),
+  expires_at: timestamp('expires_at', { withTimezone: true }).notNull(),
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow()
+})
+
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert 

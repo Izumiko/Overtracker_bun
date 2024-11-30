@@ -17,7 +17,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/bun": "latest",
-    "@types/node": "latest",
+    "@types/node": "^22.10.1",
     "drizzle-kit": "^0.28.1"
   }
 }

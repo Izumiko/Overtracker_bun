@@ -4,6 +4,8 @@ import ClientWrapper from "@/components/ClientWrapper";
 import Header from "@/components/layout/Header";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { Toaster } from 'react-hot-toast'
+import { AuthProvider } from '@/contexts/AuthContext'
+import AuthInit from '@/components/auth/AuthInit'
 
 /**
  * Metadata configuration for the application
@@ -38,10 +40,14 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <ThemeProvider>
-          <ClientWrapper>
-            <Header />
-            {children}
-          </ClientWrapper>
+          <AuthProvider>
+            <AuthInit>
+              <ClientWrapper>
+                <Header />
+                {children}
+              </ClientWrapper>
+            </AuthInit>
+          </AuthProvider>
         </ThemeProvider>
         <Toaster position="bottom-right" />
       </body>

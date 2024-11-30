@@ -4,6 +4,13 @@ import { jwt } from '@elysiajs/jwt'
 import { swagger } from '@elysiajs/swagger'
 import { initializeDatabase } from './db'
 import { auth } from './routes/auth'
+import { cleanExpiredTokens } from './tasks/cleanTokens'
+
+declare module 'elysia' {
+  interface ElysiaConfig {
+    'jwt': typeof jwt
+  }
+}
 
 const app = new Elysia()
   .use(cors({
@@ -32,7 +39,7 @@ const app = new Elysia()
 // Inicializar la base de datos antes de arrancar el servidor
 await initializeDatabase()
   .then(() => {
-    const port = process.env.PORT || 1337
+    const port = Number(process.env.PORT) || 1337
     app.listen(port)
     
     console.log('\n🚀 Servidor iniciado correctamente:')
@@ -40,6 +47,11 @@ await initializeDatabase()
     console.log(`📚 Documentación Swagger: http://localhost:${port}/swagger`)
     console.log(`🔑 JWT activado y configurado`)
     console.log(`👥 CORS configurado para: ${process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'}\n`)
+
+    // Programar limpieza de tokens cada 24 horas
+    setInterval(cleanExpiredTokens, 24 * 60 * 60 * 1000)
+    // Primera limpieza al iniciar
+    cleanExpiredTokens()
   })
   .catch(error => {
     console.error('Error fatal:', error)

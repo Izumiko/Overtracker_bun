@@ -8,6 +8,7 @@
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function DashboardLayout({
     children,
@@ -16,6 +17,12 @@ export default function DashboardLayout({
   }) {
     const { t } = useTranslation();
     const pathname = usePathname();
+    const { logout } = useAuth();
+
+    const handleLogout = async (e: React.MouseEvent) => {
+      e.preventDefault();
+      await logout();
+    };
 
   const navItems = [
     { href: '/dashboard', label: 'dashboard.nav.home'},
@@ -55,12 +62,13 @@ export default function DashboardLayout({
 
         {/* Logout button */}
         <div className="p-4 border-t border-border">
-          <Link
-            href="/auth/logout"
+          <a
+            href="#"
+            onClick={handleLogout}
             className="flex items-center justify-center px-6 py-3 text-sm text-primary hover:bg-surface-light rounded-lg transition-colors"
           >
-            <span>Logout</span>
-          </Link>
+            <span>{t('common.logout')}</span>
+          </a>
         </div>
       </aside>
 

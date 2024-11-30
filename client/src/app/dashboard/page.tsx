@@ -7,6 +7,9 @@
 
 import { useTranslation } from 'react-i18next';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 // Datos de prueba para los torrents recientes
 const mockRecentTorrents = [
@@ -54,6 +57,14 @@ const mockRecentTorrents = [
 
 export default function DashboardHome() {
   const { t } = useTranslation();
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/auth/login');
+    }
+  }, [isAuthenticated, router]);
 
   return (
     <DashboardLayout>

@@ -69,6 +69,24 @@ export async function initializeDatabase() {
       CREATE INDEX IF NOT EXISTS idx_users_last_login ON users(last_login)
     `
     
+    // Crear tabla de refresh tokens
+    await migrationClient`
+      CREATE TABLE IF NOT EXISTS refresh_tokens (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        token TEXT NOT NULL UNIQUE,
+        expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `
+    
+    await migrationClient`
+      CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user ON refresh_tokens(user_id)
+    `
+    await migrationClient`
+      CREATE INDEX IF NOT EXISTS idx_refresh_tokens_expires ON refresh_tokens(expires_at)
+    `
+
     console.log('✅ Base de datos inicializada correctamente')
   } catch (error) {
     console.error('❌ Error inicializando la base de datos:', error)

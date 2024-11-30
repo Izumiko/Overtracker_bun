@@ -88,7 +88,9 @@
       "successRecovery": "Si existe una cuenta con este correo electrónico, recibirá instrucciones de recuperación.",
       "successPassword": "La contraseña se cambió correctamente",
       "error": "Ha ocurrido un error. Por favor inténtalo de nuevo más tarde.",
-      "disconnected": "Has sido desconectado. Por favor inicie sesión nuevamente para continuar."
+      "disconnected": "Has sido desconectado. Por favor inicie sesión nuevamente para continuar.",
+      "successLogin": "Sesión iniciada correctamente",
+      "successLogout": "Sesión cerrada correctamente"
     }
   },
   "torrents": {
@@ -481,5 +483,9 @@
         "uploader": "Subido por"
       }
     }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "logout": "Cerrar sesión"
   }
 } 

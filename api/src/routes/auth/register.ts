@@ -3,9 +3,10 @@ import { db } from '../../db'
 import { users } from '../../db/schema/users'
 import { eq, or } from 'drizzle-orm'
 import bcrypt from 'bcrypt'
+import type { RegisterRoute } from '../../types/elysia-route-types'
 
 export const register = new Elysia()
-  .post('/register', async ({ body, set }) => {
+  .post('/register', async ({ body, set }: RegisterRoute) => {
     const { username, email, password } = body
 
     try {
@@ -69,15 +70,8 @@ export const register = new Elysia()
     }
   }, {
     body: t.Object({
-      username: t.String({
-        minLength: 3,
-        maxLength: 50
-      }),
-      email: t.String({
-        format: 'email'
-      }),
-      password: t.String({
-        minLength: 6
-      })
+      username: t.String(),
+      email: t.String(),
+      password: t.String()
     })
   }) 

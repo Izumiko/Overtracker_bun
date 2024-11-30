@@ -1,9 +1,13 @@
 import { Elysia } from 'elysia'
 import { register } from './register'
-// import { login } from './login'
-// import { recover } from './recover'
+import { login } from './login'
+import { logout } from './logout'
+import { refresh } from './refresh'
 
-export const auth = new Elysia({ prefix: '/auth' })
-  .use(register)
-  // .use(login)
-  // .use(recover) 
+export const auth = new Elysia()
+  .group('/auth', app => app
+    .use(register)
+    .use(login)
+    .use(logout)
+    .use(refresh)
+  ) 
