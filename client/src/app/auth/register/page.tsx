@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import AuthCard from '@/components/auth/AuthCard';
 import AuthInput from '@/components/auth/AuthInput';
-import { config } from "@system/next.config";
 import axios from "axios";
 import {showNotification} from "@/utils/notifications";
 import PasswordStrengthBar from '@/components/auth/PasswordStrengthBar';
@@ -37,8 +36,8 @@ export default function RegisterPage() {
       newErrors.email = t('auth.register.errors.email');
     }
 
-    if (formData.password.length < 8) {
-      newErrors.password = t('auth.register.errors.password');
+    if (formData.password.length < 6) {
+      newErrors.password = t('auth.register.errors.passwordRequirements');
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -52,16 +51,28 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Here goes the registration logic
-      await axios.post(`${config.WEBSITE_URL}/api/auth/local/register`, {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password
-      }).then((res) => {
-        showNotification.success(t('auth.notification.successRegister'));
-      }).catch((err) => {
-        showNotification.error(t('auth.notification.error'));
-      });
+      try {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password
+        });
+
+        if (response.data.success) {
+          showNotification.success(t('auth.notification.successRegister'));
+        } else {
+          showNotification.error(response.data.message || t('auth.notification.error'));
+        }
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message || t('auth.notification.error');
+          showNotification.error(errorMessage);
+          
+          if (error.response?.data?.errors) {
+            setErrors(error.response.data.errors);
+          }
+        }
+      }
     }
   };
 
