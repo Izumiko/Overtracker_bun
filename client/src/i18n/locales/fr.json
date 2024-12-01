@@ -29,6 +29,19 @@
       "register": "S'inscrire"
     }
   },
+  "errors": {
+      "404": {
+        "title": "Page Not Found",
+        "message": "Could not find requested resource",
+        "home": "Return Home"
+      },
+      "500": {
+        "title": "Internal Server Error",
+        "message": "Something went wrong!",
+        "retry": "Try again",
+        "home": "Return Home"
+      }
+    },
   "auth": {
     "login": {
       "title": "Connexion",
@@ -75,7 +88,9 @@
       "successRecovery": "Si un compte existe avec cet email, vous recevrez les instructions de récupération",
       "successPassword": "Mot de passe changé avec succès",
       "error": "Une erreur s'est produite. Veuillez réessayer plus tard",
-      "disconnected": "Vous avez été déconnecté. Veuillez vous reconnecter pour continuer."
+      "disconnected": "Vous avez été déconnecté. Veuillez vous reconnecter pour continuer.",
+      "successLogin": "Connexion réussie",
+      "successLogout": "Déconnexion réussie"
     }
   },
   "torrents": {
@@ -469,5 +484,8 @@
         "uploader": "Téléversé par"
       }
     }
+  },
+  "common": {
+    "loading": "Chargement..."
   }
 } 

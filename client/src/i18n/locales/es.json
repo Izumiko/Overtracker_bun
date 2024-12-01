@@ -486,7 +486,6 @@
     }
   },
   "common": {
-    "loading": "Cargando...",
-    "logout": "Cerrar sesión"
+    "loading": "Cargando..."
   }
 } 

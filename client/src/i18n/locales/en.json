@@ -88,7 +88,9 @@
         "successRecovery": "If an account exists with this email, you will receive recovery instructions",
         "successPassword": "Password changed successfully",
         "error": "An error has occurred. Please try again later.",
-        "disconnected": "You have been logged out. Please log back in to continue."
+        "disconnected": "You have been logged out. Please log back in to continue.",
+        "successLogin": "Successfully logged in",
+        "successLogout": "Successfully logged out"
       }
     },
     "torrents": {
@@ -482,5 +484,8 @@
           "uploader": "Uploader"
         }
       }
-    }
+    },
+    "common": {
+    "loading": "Loading..."
+  }
 } 
