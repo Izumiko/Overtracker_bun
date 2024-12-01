@@ -271,7 +271,8 @@
         "downloaded": "Total Downloaded",
         "ratio": "Ratio",
         "points": "Points",
-        "rank": "User Rank"
+        "rank": "User Rank",
+        "announceUrl": "Announce URL"
       },
       "preferences": {
         "notifications": "Enable Notifications",
@@ -448,6 +449,10 @@
             "stopped": "Stopped seeding"
           }
         }
+      },
+      "notification": {
+        "announceCopied": "Announce URL copied to clipboard",
+        "copyError": "Error copying URL"
       }
     },
     "welcome": {
@@ -491,6 +496,7 @@
       }
     },
     "common": {
-    "loading": "Loading..."
-  }
+      "loading": "Loading...",
+      "copy": "Copy"
+    }
 } 

@@ -70,7 +70,8 @@ export const login = new Elysia()
           role: user.role,
           verified: user.verified,
           last_login: user.last_login,
-          created_at: user.created_at
+          created_at: user.created_at,
+          passkey: user.passkey
         },
         access_token,
         refresh_token

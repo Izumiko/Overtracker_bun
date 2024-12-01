@@ -271,7 +271,8 @@
       "downloaded": "Total Descargado",
       "ratio": "Ratio",
       "points": "Puntos",
-      "rank": "Rango de Usuario"
+      "rank": "Rango de Usuario",
+      "announceUrl": "URL de Announce"
     },
     "preferences": {
       "notifications": "Activar Notificaciones",
@@ -448,6 +449,10 @@
           "stopped": "Dejó de compartir"
         }
       }
+    },
+    "notification": {
+      "announceCopied": "URL de announce copiada al portapapeles",
+      "copyError": "Error al copiar la URL"
     }
   },
   "welcome": {
@@ -491,6 +496,7 @@
     }
   },
   "common": {
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "copy": "Copiar"
   }
 } 

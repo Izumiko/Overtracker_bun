@@ -11,6 +11,7 @@ export interface LoginResponse {
     verified: boolean
     last_login: string
     created_at: string
+    passkey: string
   }
   access_token?: string
   refresh_token?: string

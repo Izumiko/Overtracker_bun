@@ -221,7 +221,7 @@
           "siteDescription": "Description du Site",
           "maintenance": "Mode Maintenance",
           "logo": "Logo du Site",
-          "uploadLogo": "Télécharger Logo",
+          "uploadLogo": "T��lécharger Logo",
           "removeLogo": "Supprimer Logo",
           "logoHelp": "Taille recommandée : 320x100px. Supporte PNG, JPG, SVG."
         },
@@ -271,7 +271,8 @@
       "downloaded": "Total Téléchargé",
       "ratio": "Ratio",
       "points": "Points",
-      "rank": "Rang Utilisateur"
+      "rank": "Rang Utilisateur",
+      "announceUrl": "URL d'Announce"
     },
     "preferences": {
       "notifications": "Activer les Notifications",
@@ -448,6 +449,10 @@
           "stopped": "Partage arrêté"
         }
       }
+    },
+    "notification": {
+      "announceCopied": "URL d'announce copiée dans le presse-papiers",
+      "copyError": "Erreur lors de la copie de l'URL"
     }
   },
   "welcome": {
@@ -491,6 +496,7 @@
     }
   },
   "common": {
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "copy": "Copier"
   }
 } 
