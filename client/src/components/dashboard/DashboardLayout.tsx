@@ -67,7 +67,7 @@ export default function DashboardLayout({
             onClick={handleLogout}
             className="flex items-center justify-center px-6 py-3 text-sm text-primary hover:bg-surface-light rounded-lg transition-colors"
           >
-            <span>{t('common.logout')}</span>
+            <span>{t('dashboard.nav.logout')}</span>
           </a>
         </div>
       </aside>

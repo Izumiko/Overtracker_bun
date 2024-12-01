@@ -469,7 +469,8 @@
       "rss": "RSS",
       "reports": "Reportes",
       "stats": "Estadísticas",
-      "admin": "Admin"
+      "admin": "Admin",
+      "logout": "Cerrar Sesión"
     },
     "latestTorrents": {
       "title": "Últimos Torrents",

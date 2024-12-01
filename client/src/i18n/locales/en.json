@@ -467,7 +467,8 @@
         "rss": "RSS",
         "reports": "Reports",
         "stats": "Stats",
-        "admin": "Admin"
+        "admin": "Admin",
+        "logout": "Logout"
       },
       "latestTorrents": {
         "title": "Latest Torrents",

@@ -454,7 +454,8 @@
       "rss": "RSS",
       "reports": "Rapports",
       "stats": "Statistiques",
-      "admin": "Admin"
+      "admin": "Admin",
+      "logout": "déconnexion"
     },
     "latestTorrents": {
       "title": "Derniers Torrents",
