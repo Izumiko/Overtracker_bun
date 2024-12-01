@@ -44,6 +44,7 @@ export async function initializeDatabase() {
         username VARCHAR(50) UNIQUE NOT NULL,
         email VARCHAR(255) UNIQUE NOT NULL,
         password_hash TEXT NOT NULL,
+        passkey VARCHAR(32) UNIQUE NOT NULL,
         role user_role NOT NULL DEFAULT 'user',
         verified BOOLEAN NOT NULL DEFAULT false,
         last_login TIMESTAMP WITH TIME ZONE,
@@ -58,6 +59,9 @@ export async function initializeDatabase() {
     `
     await migrationClient`
       CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)
+    `
+    await migrationClient`
+      CREATE INDEX IF NOT EXISTS idx_users_passkey ON users(passkey)
     `
     await migrationClient`
       CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)

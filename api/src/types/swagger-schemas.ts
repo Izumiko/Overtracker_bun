@@ -4,6 +4,13 @@ export const userSchema = {
     id: { type: 'string', format: 'uuid' },
     username: { type: 'string', minLength: 3, maxLength: 50 },
     email: { type: 'string', format: 'email' },
+    passkey: {
+      type: 'string',
+      minLength: 32,
+      maxLength: 32,
+      pattern: '^(?=.*[A-Z])(?=.*\\d)[A-Z0-9]{32}$',
+      description: 'Identificador único de 32 caracteres (letras mayúsculas y números)'
+    },
     role: { type: 'string', enum: ['user', 'moderator', 'admin'] },
     verified: { type: 'boolean' },
     last_login: { type: 'string', format: 'date-time', nullable: true },

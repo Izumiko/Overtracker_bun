@@ -8,6 +8,7 @@ export const users = pgTable('users', {
   username: varchar('username', { length: 50 }).notNull().unique(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   password_hash: text('password_hash').notNull(),
+  passkey: varchar('passkey', { length: 32 }).notNull().unique(),
   role: userRoleEnum('role').notNull().default('user'),
   verified: boolean('verified').notNull().default(false),
   last_login: timestamp('last_login', { withTimezone: true }),

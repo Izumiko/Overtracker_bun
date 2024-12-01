@@ -5,6 +5,7 @@ import { eq, or } from 'drizzle-orm'
 import bcrypt from 'bcrypt'
 import type { RegisterRoute } from '../../types/elysia-route-types'
 import { userSchema, errorSchema } from '../../types/swagger-schemas'
+import { generateUniquePasskey, isValidPasskey } from '../../utils/passkey'
 
 export const register = new Elysia()
   .post('/register', async ({ body, set }: RegisterRoute) => {
@@ -35,6 +36,17 @@ export const register = new Elysia()
       const salt = await bcrypt.genSalt(10)
       const password_hash = await bcrypt.hash(password, salt)
 
+      // Generar passkey único
+      const passkey = await generateUniquePasskey()
+      
+      if (!isValidPasskey(passkey)) {
+        set.status = 500
+        return {
+          success: false,
+          message: 'Error al generar el passkey'
+        }
+      }
+
       // Insertar nuevo usuario
       const [newUser] = await db
         .insert(users)
@@ -42,6 +54,7 @@ export const register = new Elysia()
           username,
           email,
           password_hash,
+          passkey,
           role: 'user',
           verified: false,
           last_login: null
@@ -50,6 +63,7 @@ export const register = new Elysia()
           id: users.id,
           username: users.username,
           email: users.email,
+          passkey: users.passkey,
           role: users.role,
           verified: users.verified,
           created_at: users.created_at
@@ -66,7 +80,7 @@ export const register = new Elysia()
       set.status = 500
       return {
         success: false,
-        message: 'Error al registrar usuario'
+        message: error instanceof Error ? error.message : 'Error al registrar usuario'
       }
     }
   }, {
