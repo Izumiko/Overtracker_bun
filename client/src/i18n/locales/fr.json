@@ -221,7 +221,7 @@
           "siteDescription": "Description du Site",
           "maintenance": "Mode Maintenance",
           "logo": "Logo du Site",
-          "uploadLogo": "T��lécharger Logo",
+          "uploadLogo": "Tlécharger Logo",
           "removeLogo": "Supprimer Logo",
           "logoHelp": "Taille recommandée : 320x100px. Supporte PNG, JPG, SVG."
         },
@@ -265,7 +265,7 @@
     "fields": {
       "username": "Nom d'utilisateur",
       "email": "Email",
-      "joinDate": "Membre Depuis",
+      "joinDate": "Membre depuis",
       "avatar": "Photo de Profil",
       "uploaded": "Total Uploadé",
       "downloaded": "Total Téléchargé",

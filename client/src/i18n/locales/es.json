@@ -223,7 +223,7 @@
           "logo": "Logo del Sitio",
           "uploadLogo": "Subir Logo",
           "removeLogo": "Eliminar Logo",
-          "logoHelp": "Tamaño recomendado: 320x100px. Soporta PNG, JPG, SVG."
+          "logoHelp": "Tama��o recomendado: 320x100px. Soporta PNG, JPG, SVG."
         },
         "registration": {
           "title": "Configuración de Registro",
@@ -265,7 +265,7 @@
     "fields": {
       "username": "Usuario",
       "email": "Correo Electrónico",
-      "joinDate": "Miembro Desde",
+      "joinDate": "Usuario desde",
       "avatar": "Foto de Perfil",
       "uploaded": "Total Subido",
       "downloaded": "Total Descargado",

@@ -15,6 +15,8 @@ import RecentActivity from '@/components/profile/RecentActivity';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { showNotification } from '@/utils/notifications';
+import { format } from 'date-fns';
+import { es, enUS, fr } from 'date-fns/locale';
 
 // Example data
 const mockProfile: UserProfile = {
@@ -39,7 +41,7 @@ const mockProfile: UserProfile = {
 };
 
 export default function ProfilePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile>(mockProfile);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -72,7 +74,7 @@ export default function ProfilePage() {
   };
 
   const announceUrl = user?.passkey 
-    ? `${process.env.NEXT_PUBLIC_API_URL}/announce/${user.passkey}`
+    ? `${process.env.NEXT_PUBLIC_TRACKER_URL || 'http://tracker.example.com'}/announce?passkey=${user.passkey}`
     : '';
 
   useEffect(() => {
@@ -87,6 +89,18 @@ export default function ProfilePage() {
       showNotification.error(t('profile.notification.copyError'));
     }
   };
+
+  const getLocale = () => {
+    switch (i18n.language) {
+      case 'es': return es;
+      case 'fr': return fr;
+      default: return enUS;
+    }
+  };
+
+  const formattedJoinDate = user?.created_at 
+    ? format(new Date(user.created_at), 'PPP', { locale: getLocale() })
+    : '';
 
   return (
     <DashboardLayout>
@@ -156,6 +170,10 @@ export default function ProfilePage() {
                     <span className="text-text-secondary">{t('profile.fields.rank')}</span>
                     <span className="font-medium">{profile.stats.rank}</span>
                   </div>
+                  <div className="flex justify-between">
+                    <span className="text-text-secondary">{t('profile.fields.joinDate')}</span>
+                    <span className="font-medium">{formattedJoinDate}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -178,12 +196,12 @@ export default function ProfilePage() {
                       value={announceUrl}
                       readOnly
                       className="flex-1 p-2 bg-background border border-border rounded 
-                               text-text font-mono text-sm"
+                                 text-text font-mono text-sm"
                     />
                     <button
                       onClick={copyAnnounceUrl}
                       className="px-4 py-2 bg-primary text-background rounded hover:bg-primary-dark 
-                               transition-colors flex items-center gap-2"
+                                 transition-colors flex items-center gap-2"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 

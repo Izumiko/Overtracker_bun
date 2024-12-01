@@ -265,7 +265,7 @@
       "fields": {
         "username": "Username",
         "email": "Email",
-        "joinDate": "Member Since",
+        "joinDate": "Member since",
         "avatar": "Profile Picture",
         "uploaded": "Total Uploaded",
         "downloaded": "Total Downloaded",
