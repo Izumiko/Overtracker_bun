@@ -17,25 +17,30 @@ export default function DashboardLayout({
   }) {
     const { t } = useTranslation();
     const pathname = usePathname();
-    const { logout } = useAuth();
+    const { logout, user } = useAuth();
 
     const handleLogout = async (e: React.MouseEvent) => {
       e.preventDefault();
       await logout();
     };
 
-  const navItems = [
-    { href: '/dashboard', label: 'dashboard.nav.home'},
-    { href: '/torrents/search', label: 'dashboard.nav.search'},
-    { href: '/torrents/upload', label: 'dashboard.nav.upload'},
-    { href: '/profile', label: 'dashboard.nav.profile'},
-    { href: '/dashboard/announcements', label: 'dashboard.nav.announcements'},
-    { href: '/dashboard/requests', label: 'dashboard.nav.requests'},
-    { href: '/dashboard/rss', label: 'dashboard.nav.rss'},
-    { href: '/dashboard/reports', label: 'dashboard.nav.reports'},
-    { href: '/dashboard/stats', label: 'dashboard.nav.stats'},
-    { href: '/admin', label: 'dashboard.nav.admin'},
-  ];
+    // Lista base de items de navegación
+    const baseNavItems = [
+      { href: '/dashboard', label: 'dashboard.nav.home'},
+      { href: '/torrents/search', label: 'dashboard.nav.search'},
+      { href: '/torrents/upload', label: 'dashboard.nav.upload'},
+      { href: '/profile', label: 'dashboard.nav.profile'},
+      { href: '/dashboard/announcements', label: 'dashboard.nav.announcements'},
+      { href: '/dashboard/requests', label: 'dashboard.nav.requests'},
+      { href: '/dashboard/rss', label: 'dashboard.nav.rss'},
+      { href: '/dashboard/reports', label: 'dashboard.nav.reports'},
+      { href: '/dashboard/stats', label: 'dashboard.nav.stats'},
+    ];
+
+    // Añadir item de admin si el usuario tiene el rol adecuado
+    const navItems = user?.role === 'admin' 
+      ? [...baseNavItems, { href: '/admin', label: 'dashboard.nav.admin'}]
+      : baseNavItems;
 
   return (
     <div className="min-h-screen bg-background">

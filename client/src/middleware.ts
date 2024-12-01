@@ -14,6 +14,14 @@ const authRoutes = [
   '/auth/register'
 ]
 
+const adminRoutes = [
+  '/admin',
+  '/admin/users',
+  '/admin/torrents',
+  '/admin/reports',
+  '/admin/settings'
+]
+
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value
   const { pathname } = request.nextUrl
@@ -21,8 +29,19 @@ export function middleware(request: NextRequest) {
   // Verificar si la ruta requiere autenticación
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
   const isAuthRoute = authRoutes.some(route => pathname.startsWith(route))
+  const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route))
 
-  console.log('Middleware:', { pathname, token, isProtectedRoute, isAuthRoute }) // Para debugging
+  // Si es ruta de admin, verificar rol
+  if (isAdminRoute) {
+    try {
+      const payload = JSON.parse(atob(token?.split('.')[1] || ''))
+      if (payload.role !== 'admin') {
+        return NextResponse.redirect(new URL('/dashboard', request.url))
+      }
+    } catch {
+      return NextResponse.redirect(new URL('/auth/login', request.url))
+    }
+  }
 
   // Si es ruta protegida y no hay token, redirigir a login
   if (isProtectedRoute && !token) {

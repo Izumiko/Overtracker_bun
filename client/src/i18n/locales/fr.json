@@ -40,7 +40,8 @@
         "message": "Something went wrong!",
         "retry": "Try again",
         "home": "Return Home"
-      }
+      },
+      "unauthorized": "Vous n'avez pas la permission d'accéder à cette section"
     },
   "auth": {
     "login": {
@@ -138,7 +139,11 @@
         "category": "Catégorie",
         "tags": "Tags",
         "visibility": "Visibilité",
-        "submit": "Uploader"
+        "submit": "Uploader",
+        "tagsPlaceholder": "Entrez les tags séparés par des virgules",
+        "tagsHelp": "Maximum 10 tags séparés par des virgules",
+        "suggestedTags": "Tags suggérés",
+        "selectCategory": "Sélectionner une catégorie"
       },
       "dropzone": {
         "text": "Déposez le fichier torrent ici ou cliquez pour sélectionner",

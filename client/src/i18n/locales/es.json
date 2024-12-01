@@ -40,7 +40,8 @@
       "message": "¡Algo salió mal!",
       "retry": "Intentar de nuevo",
       "home": "Volver al Inicio"
-    }
+    },
+    "unauthorized": "No tienes permisos para acceder a esta sección"
   },
   "auth": {
     "login": {
@@ -138,7 +139,11 @@
         "category": "Categoría",
         "tags": "Etiquetas",
         "visibility": "Visibilidad",
-        "submit": "Subir"
+        "submit": "Subir",
+        "tagsPlaceholder": "Introduce etiquetas separadas por comas",
+        "tagsHelp": "Máximo 10 etiquetas separadas por comas",
+        "suggestedTags": "Etiquetas sugeridas",
+        "selectCategory": "Selecciona una categoría"
       },
       "dropzone": {
         "text": "Arrastra el archivo torrent aquí o haz clic para seleccionar",
