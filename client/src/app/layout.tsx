@@ -13,6 +13,10 @@ import AuthInit from '@/components/auth/AuthInit'
 export const metadata: Metadata = {
   title: "OPTracker",
   description: "The OverPowered Torrent Tracker",
+  icons: {
+    icon: '/favicon.png',  // Ruta al favicon
+    apple: '/favicon.png', // También lo usamos para iOS
+  },
 };
 
 /**

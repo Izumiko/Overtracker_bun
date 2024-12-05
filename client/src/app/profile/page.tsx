@@ -51,6 +51,7 @@ export default function ProfilePage() {
     console.log('User data:', user);
   }, [user]);
 
+  /*
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -62,7 +63,7 @@ export default function ProfilePage() {
       setPreviewUrl(url);
     }
   };
-
+*/
   const handleRemoveAvatar = () => {
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
@@ -85,7 +86,7 @@ export default function ProfilePage() {
     try {
       await navigator.clipboard.writeText(announceUrl);
       showNotification.success(t('profile.notification.announceCopied'));
-    } catch (_) {
+    } catch /*(_)*/ {
       showNotification.error(t('profile.notification.copyError'));
     }
   };
