@@ -9,7 +9,9 @@
     "@elysiajs/cors": "latest",
     "@elysiajs/jwt": "latest",
     "@elysiajs/swagger": "latest",
+    "@types/bencode": "^2.0.4",
     "bcrypt": "^5.1.1",
+    "bencode": "^4.0.0",
     "drizzle-orm": "^0.36.4",
     "elysia": "latest",
     "postgres": "^3.4.5"

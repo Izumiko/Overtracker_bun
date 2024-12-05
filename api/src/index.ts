@@ -5,6 +5,7 @@ import { swagger } from '@elysiajs/swagger'
 import { initializeDatabase } from './db'
 import { auth } from './routes/auth'
 import { cleanExpiredTokens } from './tasks/cleanTokens'
+import { torrents } from './routes/torrents'
 
 declare module 'elysia' {
   interface ElysiaConfig {
@@ -60,6 +61,7 @@ const app = new Elysia()
   // Agrupar rutas por funcionalidad
   .group('/api/v1', app => app
     .use(auth)
+    .use(torrents)
   )
 
 // Inicializar la base de datos antes de arrancar el servidor

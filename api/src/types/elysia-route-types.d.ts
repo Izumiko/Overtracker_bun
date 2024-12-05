@@ -29,4 +29,16 @@ export interface RefreshRoute extends Context {
 
 export interface LogoutRoute extends Context {
   body: unknown
+}
+
+export interface UploadTorrentBody {
+  torrentFile: string
+  name: string
+  description: string
+  category: string
+  tags: string[]
+}
+
+export interface UploadTorrentRoute extends Context {
+  body: UploadTorrentBody
 } 

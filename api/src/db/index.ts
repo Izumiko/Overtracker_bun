@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
-import * as schema from './schema/users'
+import * as schema from './schema'
 
 // Cliente SQL para migraciones
 const migrationClient = postgres(process.env.DATABASE_URL!, {
@@ -12,7 +12,7 @@ const migrationClient = postgres(process.env.DATABASE_URL!, {
 const queryClient = postgres(process.env.DATABASE_URL!)
 export const db = drizzle(queryClient, { schema })
 
-// Función para crear las tablas si no existen
+// Actualizar initializeDatabase para incluir las nuevas tablas
 export async function initializeDatabase() {
   try {
     // 1. Crear extensiones necesarias
@@ -89,6 +89,48 @@ export async function initializeDatabase() {
     `
     await migrationClient`
       CREATE INDEX IF NOT EXISTS idx_refresh_tokens_expires ON refresh_tokens(expires_at)
+    `
+
+    // Crear enum para versión de torrent
+    await migrationClient`
+      DO $$ BEGIN
+        CREATE TYPE torrent_version AS ENUM ('v1', 'v2', 'hybrid');
+      EXCEPTION
+        WHEN duplicate_object THEN null;
+      END $$;
+    `
+
+    // Crear tabla torrents
+    await migrationClient`
+      CREATE TABLE IF NOT EXISTS torrents (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        name VARCHAR(255) NOT NULL,
+        description TEXT NOT NULL,
+        info_hash VARCHAR(40) NOT NULL UNIQUE,
+        info_hash_v2 VARCHAR(64),
+        version torrent_version NOT NULL,
+        category VARCHAR(50) NOT NULL,
+        uploader_id UUID NOT NULL REFERENCES users(id),
+        size VARCHAR(20) NOT NULL,
+        file_count INTEGER NOT NULL,
+        tags TEXT[],
+        files JSONB NOT NULL,
+        piece_length INTEGER NOT NULL,
+        private BOOLEAN NOT NULL DEFAULT true,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `
+
+    // Crear tabla torrent_stats
+    await migrationClient`
+      CREATE TABLE IF NOT EXISTS torrent_stats (
+        torrent_id UUID PRIMARY KEY REFERENCES torrents(id),
+        seeders INTEGER NOT NULL DEFAULT 0,
+        leechers INTEGER NOT NULL DEFAULT 0,
+        completed INTEGER NOT NULL DEFAULT 0,
+        last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
     `
 
     console.log('✅ Base de datos inicializada correctamente')
