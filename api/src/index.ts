@@ -1,3 +1,8 @@
+/**
+ * @file index.ts
+ * @description Main file
+ */
+
 import { Elysia } from 'elysia'
 import { cors } from '@elysiajs/cors'
 import { jwt } from '@elysiajs/jwt'
@@ -58,30 +63,30 @@ const app = new Elysia()
     secret: process.env.JWT_SECRET || 'tu-secreto'
   }))
 
-  // Agrupar rutas por funcionalidad
+  // Group routes by functionality
   .group('/api/v1', app => app
     .use(auth)
     .use(torrents)
   )
 
-// Inicializar la base de datos antes de arrancar el servidor
+// Initialize the database before starting the server
 await initializeDatabase()
   .then(() => {
     const port = Number(process.env.PORT) || 1337
     app.listen(port)
     
-    console.log('\n🚀 Servidor iniciado correctamente:')
-    console.log(`📡 API corriendo en: http://localhost:${port}/api/v1`)
-    console.log(`📚 Documentación Swagger: http://localhost:${port}/swagger`)
-    console.log(`🔑 JWT activado y configurado`)
-    console.log(`👥 CORS configurado para: ${process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'}\n`)
+    console.log('\n🚀 Server started correctly:')
+    console.log(`📡 API running on: http://localhost:${port}/api/v1`)
+    console.log(`📚 Swagger documentation: http://localhost:${port}/swagger`)
+    console.log(`🔑 JWT activated and configured`)
+    console.log(`👥 CORS configured for: ${process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'}\n`)
 
-    // Programar limpieza de tokens cada 24 horas
+    // Schedule cleanup every 24 hours
     setInterval(cleanExpiredTokens, 24 * 60 * 60 * 1000)
-    // Primera limpieza al iniciar
+    // First cleanup when starting
     cleanExpiredTokens()
   })
   .catch(error => {
-    console.error('Error fatal:', error)
+    console.error('Fatal error:', error)
     process.exit(1)
   }) 

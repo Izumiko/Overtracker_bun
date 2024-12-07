@@ -1,6 +1,11 @@
+/**
+ * @file users.ts
+ * @description Users schema
+ */
+
 import { pgTable, uuid, varchar, text, timestamp, pgEnum, boolean } from 'drizzle-orm/pg-core'
 
-// Definir el enum de roles
+// Define the user role enum
 export const userRoleEnum = pgEnum('user_role', ['user', 'moderator', 'admin'])
 
 export const users = pgTable('users', {

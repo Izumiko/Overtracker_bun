@@ -1,3 +1,8 @@
+/**
+ * @file torrentParser.ts
+ * @description Torrent parser
+ */
+
 import bencode from 'bencode'
 import crypto from 'crypto'
 
@@ -23,33 +28,33 @@ export async function parseTorrent(torrentBase64: string): Promise<{
     const decoded = bencode.decode(torrentBuffer)
     const info = decoded.info
 
-    // Calcular info_hash (v1)
+    // Calculate info_hash (v1)
     const infoBuffer = bencode.encode(info)
     const infoHash = crypto.createHash('sha1').update(infoBuffer).digest('hex')
 
-    // Detectar versión y calcular info_hash_v2 si es necesario
+    // Detect version and calculate info_hash_v2 if necessary
     let version: 'v1' | 'v2' | 'hybrid' = 'v1'
     let infoHashV2: string | undefined
 
     if (info.file_tree) {
       version = info.pieces ? 'hybrid' : 'v2'
-      // Calcular info_hash_v2 para v2/hybrid
+      // Calculate info_hash_v2 for v2/hybrid
       infoHashV2 = crypto.createHash('sha256').update(infoBuffer).digest('hex')
     }
 
-    // Procesar archivos
+    // Process files
     let files: { path: string; size: bigint }[] = []
     let totalSize = BigInt(0)
 
     if (info.files) {
-      // Multi-archivo
+      // Multi-file
       files = info.files.map((file: any) => ({
         path: Array.isArray(file.path) ? file.path.join('/') : file.path,
         size: BigInt(file.length)
       }))
       totalSize = files.reduce((acc, file) => acc + file.size, BigInt(0))
     } else {
-      // Archivo único
+      // Single file
       files = [{
         path: info.name.toString(),
         size: BigInt(info.length)

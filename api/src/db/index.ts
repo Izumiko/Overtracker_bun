@@ -1,21 +1,26 @@
+/**
+ * @file index.ts
+ * @description Database index file
+ */
+
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import * as schema from './schema'
 
-// Cliente SQL para migraciones
+// SQL client for migrations
 const migrationClient = postgres(process.env.DATABASE_URL!, {
   max: 1,
   onnotice: () => {}
 })
 
-// Cliente SQL para la aplicación
+// SQL client for the application
 const queryClient = postgres(process.env.DATABASE_URL!)
 export const db = drizzle(queryClient, { schema })
 
-// Actualizar initializeDatabase para incluir las nuevas tablas
+// Update initializeDatabase to include the new tables
 export async function initializeDatabase() {
   try {
-    // 1. Crear extensiones necesarias
+    // 1. Create necessary extensions
     await migrationClient`
       CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
     `
@@ -23,7 +28,7 @@ export async function initializeDatabase() {
       CREATE EXTENSION IF NOT EXISTS "pgcrypto"
     `
 
-    // 2. Crear el tipo enum para roles
+    // 2. Create the user role enum
     await migrationClient`
       DO $$ BEGIN
         CREATE TYPE user_role AS ENUM ('user', 'moderator', 'admin');
@@ -32,12 +37,12 @@ export async function initializeDatabase() {
       END $$;
     `
 
-    // 3. Eliminar la tabla si existe (durante desarrollo)
+    // 3. Drop the table if it exists (during development)
     await migrationClient`
       DROP TABLE IF EXISTS users CASCADE
     `
 
-    // 4. Crear tabla users con el nuevo esquema
+    // 4. Create users table with the new schema
     await migrationClient`
       CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -53,7 +58,7 @@ export async function initializeDatabase() {
       )
     `
     
-    // 5. Crear índices
+    // 5. Create indices
     await migrationClient`
       CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)
     `
@@ -73,7 +78,7 @@ export async function initializeDatabase() {
       CREATE INDEX IF NOT EXISTS idx_users_last_login ON users(last_login)
     `
     
-    // Crear tabla de refresh tokens
+    // Create refresh tokens table
     await migrationClient`
       CREATE TABLE IF NOT EXISTS refresh_tokens (
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -91,7 +96,7 @@ export async function initializeDatabase() {
       CREATE INDEX IF NOT EXISTS idx_refresh_tokens_expires ON refresh_tokens(expires_at)
     `
 
-    // Crear enum para versión de torrent
+    // Create torrent version enum
     await migrationClient`
       DO $$ BEGIN
         CREATE TYPE torrent_version AS ENUM ('v1', 'v2', 'hybrid');
@@ -100,7 +105,7 @@ export async function initializeDatabase() {
       END $$;
     `
 
-    // Crear tabla torrents
+    // Create torrents table
     await migrationClient`
       CREATE TABLE IF NOT EXISTS torrents (
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -122,7 +127,7 @@ export async function initializeDatabase() {
       )
     `
 
-    // Crear tabla torrent_stats
+    // Create torrent_stats table
     await migrationClient`
       CREATE TABLE IF NOT EXISTS torrent_stats (
         torrent_id UUID PRIMARY KEY REFERENCES torrents(id),
@@ -133,9 +138,9 @@ export async function initializeDatabase() {
       )
     `
 
-    console.log('✅ Base de datos inicializada correctamente')
+    console.log('✅ Database initialized successfully')
   } catch (error) {
-    console.error('❌ Error inicializando la base de datos:', error)
+    console.error('❌ Error initializing the database:', error)
     throw error
   } finally {
     await migrationClient.end()

@@ -1,3 +1,8 @@
+/**
+ * @file logout.ts
+ * @description Logout route
+ */
+
 import { Elysia } from 'elysia'
 import { db } from '../../db'
 import { refreshTokens } from '../../db/schema/users'
@@ -8,7 +13,7 @@ import { errorSchema } from '../../types/swagger-schemas'
 export const logout = new Elysia()
   .post('/logout', async ({ jwt, set, headers }: LogoutRoute) => {
     try {
-      // Obtener el token del header
+      // Get the token from the header
       const authHeader = headers.authorization
       if (!authHeader?.startsWith('Bearer ')) {
         set.status = 401
@@ -20,7 +25,7 @@ export const logout = new Elysia()
 
       const token = authHeader.split(' ')[1]
 
-      // Verificar y decodificar el token
+      // Verify and decode the token
       const payload = await jwt.verify(token)
       if (!payload?.id) {
         set.status = 401
@@ -30,18 +35,18 @@ export const logout = new Elysia()
         }
       }
 
-      // Eliminar todos los refresh tokens del usuario
+      // Delete all refresh tokens for the user
       await db
         .delete(refreshTokens)
         .where(eq(refreshTokens.user_id, payload.id))
 
       return {
         success: true,
-        message: 'Sesión cerrada correctamente'
+        message: 'Session closed successfully'
       }
 
     } catch (error) {
-      console.error('Error en logout:', error)
+      console.error('Logout error:', error)
       set.status = 500
       return {
         success: false,
@@ -51,12 +56,12 @@ export const logout = new Elysia()
   }, {
     detail: {
       tags: ['Auth'],
-      summary: 'Cerrar sesión',
-      description: 'Invalida el token de acceso y elimina los refresh tokens del usuario',
+      summary: 'Logout',
+      description: 'Invalidates the access token and deletes the user\'s refresh tokens',
       security: [{ bearerAuth: [] }],
       responses: {
         200: {
-          description: 'Sesión cerrada correctamente',
+          description: 'Session closed successfully',
           content: {
             'application/json': {
               schema: {
@@ -70,7 +75,7 @@ export const logout = new Elysia()
           }
         },
         401: {
-          description: 'Token no proporcionado o inválido',
+          description: 'Token not provided or invalid',
           content: {
             'application/json': {
               schema: errorSchema
@@ -78,7 +83,7 @@ export const logout = new Elysia()
           }
         },
         500: {
-          description: 'Error del servidor',
+          description: 'Server error',
           content: {
             'application/json': {
               schema: errorSchema

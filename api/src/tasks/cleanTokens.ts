@@ -1,3 +1,8 @@
+/**
+ * @file cleanTokens.ts
+ * @description Clean expired tokens task
+ */
+
 import { db } from '../db'
 import { refreshTokens } from '../db/schema/users'
 import { lt } from 'drizzle-orm'
@@ -11,9 +16,9 @@ export async function cleanExpiredTokens() {
       .returning({ id: refreshTokens.id })
 
     if (result.length > 0) {
-      console.log(`🧹 Limpiados ${result.length} tokens expirados`)
+      console.log(`🧹 Cleaned ${result.length} expired tokens`)
     }
   } catch (error) {
-    console.error('Error limpiando tokens expirados:', error)
+    console.error('Error cleaning expired tokens:', error)
   }
 } 

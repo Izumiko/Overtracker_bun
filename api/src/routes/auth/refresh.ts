@@ -1,3 +1,8 @@
+/**
+ * @file refresh.ts
+ * @description Refresh route
+ */
+
 import { Elysia, t } from 'elysia'
 import { db } from '../../db'
 import { users, refreshTokens } from '../../db/schema/users'
@@ -11,7 +16,7 @@ export const refresh = new Elysia()
     const { refresh_token } = body
 
     try {
-      // Buscar el refresh token y verificar que no haya expirado
+      // Search for the refresh token and verify that it has not expired
       const [tokenData] = await db
         .select()
         .from(refreshTokens)
@@ -31,7 +36,7 @@ export const refresh = new Elysia()
         }
       }
 
-      // Obtener usuario
+      // Get user
       const [user] = await db
         .select()
         .from(users)
@@ -46,7 +51,7 @@ export const refresh = new Elysia()
         }
       }
 
-      // Generar nuevo access token
+      // Generate new access token
       const access_token = await jwt.sign({
         id: user.id,
         username: user.username,
@@ -55,16 +60,16 @@ export const refresh = new Elysia()
         verified: user.verified
       })
 
-      // Generar nuevo refresh token
+      // Generate new refresh token
       const new_refresh_token = randomUUID()
-      const expires_at = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 días
+      const expires_at = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
 
-      // Eliminar el refresh token anterior
+      // Delete previous refresh token
       await db
         .delete(refreshTokens)
         .where(eq(refreshTokens.id, tokenData.id))
 
-      // Guardar nuevo refresh token
+      // Save new refresh token
       await db
         .insert(refreshTokens)
         .values({
@@ -80,7 +85,7 @@ export const refresh = new Elysia()
       }
 
     } catch (error) {
-      console.error('Error en refresh token:', error)
+      console.error('Refresh token error:', error)
       set.status = 500
       return {
         success: false,
@@ -93,8 +98,8 @@ export const refresh = new Elysia()
     }),
     detail: {
       tags: ['Auth'],
-      summary: 'Refrescar token de acceso',
-      description: 'Genera un nuevo token de acceso usando un refresh token válido',
+      summary: 'Refresh access token',
+      description: 'Generates a new access token using a valid refresh token',
       responses: {
         200: {
           description: 'Token refrescado correctamente',
@@ -112,7 +117,7 @@ export const refresh = new Elysia()
           }
         },
         401: {
-          description: 'Token de refresco inválido o expirado',
+          description: 'Invalid or expired refresh token',
           content: {
             'application/json': {
               schema: errorSchema
@@ -120,7 +125,7 @@ export const refresh = new Elysia()
           }
         },
         500: {
-          description: 'Error del servidor',
+          description: 'Server error',
           content: {
             'application/json': {
               schema: errorSchema

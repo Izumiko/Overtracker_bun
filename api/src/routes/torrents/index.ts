@@ -1,3 +1,8 @@
+/**
+ * @file index.ts
+ * @description Torrents routes
+ */
+
 import { Elysia } from 'elysia'
 import { upload } from './upload'
 

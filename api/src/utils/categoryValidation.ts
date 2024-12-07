@@ -1,3 +1,8 @@
+/**
+ * @file categoryValidation.ts
+ * @description Category validation
+ */
+
 const VALID_CATEGORIES = [
   'movies',
   'tv',

@@ -1,3 +1,8 @@
+/**
+ * @file index.ts
+ * @description Auth routes
+ */
+
 import { Elysia } from 'elysia'
 import { register } from './register'
 import { login } from './login'

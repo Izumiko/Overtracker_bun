@@ -1,10 +1,15 @@
+/**
+ * @file torrents.ts
+ * @description Torrents schema
+ */
+
 import { pgTable, uuid, varchar, text, timestamp, integer, jsonb, boolean, pgEnum } from 'drizzle-orm/pg-core'
 import { users } from './users'
 
-// Enum para el tipo de BitTorrent
+// Enum for the type of BitTorrent
 export const torrentVersionEnum = pgEnum('torrent_version', ['v1', 'v2', 'hybrid'])
 
-// Tabla principal de torrents
+// Main table for torrents
 export const torrents = pgTable('torrents', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
@@ -24,7 +29,7 @@ export const torrents = pgTable('torrents', {
   updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow()
 })
 
-// Tabla para estadísticas del torrent
+// Table for torrent statistics
 export const torrentStats = pgTable('torrent_stats', {
   torrent_id: uuid('torrent_id').references(() => torrents.id).primaryKey(),
   seeders: integer('seeders').notNull().default(0),

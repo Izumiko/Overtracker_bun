@@ -1,58 +1,66 @@
 #!/bin/bash
 
-# Entrar a la carpeta db
+# Enter the db folder
 cd db
 
-# Mostrar el directorio actual para verificación
-echo "Directorio actual: $(pwd)"
+# Show current directory for verification
+echo "Current directory: $(pwd)"
 
-# Verificar si docker-compose.yml existe
+# Verify if docker-compose.yml exists
 if [ ! -f "docker-compose.yml" ]; then
-    echo "Error: No se encuentra docker-compose.yml en $(pwd)"
+    echo "Error: docker-compose.yml not found in $(pwd)"
     exit 1
 fi
 
-# Detener y eliminar contenedores existentes si los hay
-echo "Deteniendo contenedores existentes..."
+# Stop and delete existing containers if any
+echo "Stopping existing containers..."
 docker compose down
 
-# Levantar el contenedor de la base de datos con logs
-echo "Levantando contenedores..."
+# Start the database container with logs
+echo "Starting containers..."
 docker compose up -d
 
-# Verificar el estado de los contenedores
-echo "Estado de los contenedores:"
+# Verify the status of the containers
+echo "Containers status:"
 docker compose ps
 
-# Mostrar logs si hay algún error
-echo "Logs de los contenedores:"
+# Show logs if there are any errors
+echo "Containers logs:"
 docker compose logs
 
-# Esperar a que el contenedor esté listo
+# Wait for the container to be ready
 sleep 10
 
-# Volver a la carpeta raíz
+# Return to root folder
 cd ..
 
-# Entrar a la carpeta api
+# Enter api folder
 cd api
 
-# Copiar el archivo .env.example a .env
+# Copy .env.example to .env
 cp .env.example .env
 
-# Instalar dependencias con bun
+# Install dependencies with bun
 bun install
 
-# Volver a la carpeta raíz
+# Return to root folder
 cd ..
 
-# Entrar a la carpeta client
+# Enter client folder
 cd client
 
-# Copiar el archivo .env.example a .env
+# Copy .env.example to .env
 cp .env.example .env
 
-# Instalar dependencias con npm
+# Install dependencies with npm
 npm install
 
-echo "¡Instalación completada con éxito!"
+# Return to root folder
+cd ..
+
+cd api
+
+# Start development server
+bun run dev
+
+echo "Installation completed successfully!"
