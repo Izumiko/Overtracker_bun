@@ -33,9 +33,9 @@ export async function initializeDatabase() {
     `
 
     // 3. Eliminar la tabla si existe (durante desarrollo)
-    await migrationClient`
-      DROP TABLE IF EXISTS users CASCADE
-    `
+    //await migrationClient`
+      //DROP TABLE IF EXISTS users CASCADE
+   // `
 
     // 4. Crear tabla users con el nuevo esquema
     await migrationClient`

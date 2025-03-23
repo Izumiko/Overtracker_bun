@@ -10,10 +10,12 @@
     "@elysiajs/jwt": "latest",
     "@elysiajs/swagger": "latest",
     "@types/bencode": "^2.0.4",
+    "@types/parse-torrent": "^5.8.7",
     "bcrypt": "^5.1.1",
     "bencode": "^4.0.0",
     "drizzle-orm": "^0.36.4",
     "elysia": "latest",
+    "parse-torrent": "^11.0.18",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
