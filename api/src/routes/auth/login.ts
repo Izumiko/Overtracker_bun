@@ -2,7 +2,7 @@ import { Elysia, t } from 'elysia'
 import { db } from '../../db'
 import { users, refreshTokens } from '../../db/schema/users'
 import { eq } from 'drizzle-orm'
-import bcrypt from 'bcrypt'
+// import bcrypt from 'bcrypt'
 import { randomUUID } from 'crypto'
 import type { LoginRoute } from '../../types/elysia-route-types'
 import { userSchema, errorSchema } from '../../types/swagger-schemas'
@@ -21,7 +21,8 @@ export const login = new Elysia()
         .then(rows => rows[0])
 
       // Si no existe el usuario o la contraseña es incorrecta
-      if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+      // if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+      if (!user || !(await Bun.password.verify(password, user.password_hash))) {
         set.status = 401
         return {
           success: false,

@@ -2,7 +2,7 @@ import { Elysia, t } from 'elysia'
 import { db } from '../../db'
 import { users } from '../../db/schema/users'
 import { eq, or } from 'drizzle-orm'
-import bcrypt from 'bcrypt'
+// import bcrypt from 'bcrypt'
 import type { RegisterRoute } from '../../types/elysia-route-types'
 import { userSchema, errorSchema } from '../../types/swagger-schemas'
 import { generateUniquePasskey, isValidPasskey } from '../../utils/passkey'
@@ -33,8 +33,9 @@ export const register = new Elysia()
       }
 
       // Generar hash de la contraseña
-      const salt = await bcrypt.genSalt(10)
-      const password_hash = await bcrypt.hash(password, salt)
+      // const salt = await bcrypt.genSalt(10)
+      // const password_hash = await bcrypt.hash(password, salt)
+      const password_hash = await Bun.password.hash(password, {algorithm: 'bcrypt'})
 
       // Generar passkey único
       const passkey = await generateUniquePasskey()
