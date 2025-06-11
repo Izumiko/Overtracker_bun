@@ -1,3 +1,8 @@
+/**
+ * @file elysia-route-types.d.ts
+ * @description Elysia route types
+ */
+
 import type { Context } from 'elysia'
 
 export interface RegisterBody {

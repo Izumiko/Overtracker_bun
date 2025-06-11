@@ -1,3 +1,8 @@
+/**
+ * @file upload.ts
+ * @description Upload torrent route
+ */
+
 import { Elysia, t } from 'elysia'
 import { db } from '../../db'
 import { torrents } from '../../db/schema/torrents'
@@ -16,7 +21,7 @@ export const upload = new Elysia()
     } = body
 
     try {
-      // Verificar autenticación
+      // Verify authentication
       const token = await jwt.verify(
         set.headers?.authorization?.replace('Bearer ', '') || ''
       )
@@ -28,7 +33,7 @@ export const upload = new Elysia()
         }
       }
 
-      // Validar categoría
+      // Validate category
       if (!validateCategory(category)) {
         set.status = 400
         return {
@@ -37,7 +42,7 @@ export const upload = new Elysia()
         }
       }
 
-      // Validar tags
+      // Validate tags
       const validatedTags = validateTags(tags)
       if (!validatedTags.success) {
         set.status = 400
@@ -47,7 +52,7 @@ export const upload = new Elysia()
         }
       }
 
-      // Parsear el archivo torrent
+      // Parse torrent file
       const parsedTorrent = await parseTorrent(torrentFile)
       if (!parsedTorrent.success || !parsedTorrent.data) {
         set.status = 400
@@ -59,7 +64,7 @@ export const upload = new Elysia()
 
       const { data } = parsedTorrent
 
-      // Verificar si el torrent ya existe
+      // Verify if the torrent already exists
       const existingTorrent = await db
         .select()
         .from(torrents)
@@ -80,7 +85,7 @@ export const upload = new Elysia()
         }
       }
 
-      // Crear el torrent en la base de datos
+      // Create the torrent in the database
       const newTorrent = await db.insert(torrents).values({
         name,
         description,
@@ -104,7 +109,7 @@ export const upload = new Elysia()
       }
 
     } catch (error) {
-      console.error('Error al subir torrent:', error)
+      console.error('Upload torrent error:', error)
       set.status = 500
       return {
         success: false,
@@ -122,8 +127,8 @@ export const upload = new Elysia()
     detail: {
       tags: ['Torrents'],
       security: [{ Bearer: [] }],
-      summary: 'Subir un nuevo torrent',
-      description: 'Sube un nuevo torrent al tracker. El archivo torrent debe estar codificado en base64.',
+      summary: 'Upload a new torrent',
+      description: 'Uploads a new torrent to the tracker. The torrent file must be encoded in base64.',
       responses: {
         200: {
           description: 'Torrent subido correctamente',
@@ -153,7 +158,7 @@ export const upload = new Elysia()
           }
         },
         400: {
-          description: 'Error en los datos enviados',
+          description: 'Invalid data sent',
           content: {
             'application/json': {
               schema: t.Object({
@@ -164,7 +169,7 @@ export const upload = new Elysia()
           }
         },
         401: {
-          description: 'No autorizado',
+          description: 'Unauthorized',
           content: {
             'application/json': {
               schema: t.Object({
@@ -175,7 +180,7 @@ export const upload = new Elysia()
           }
         },
         500: {
-          description: 'Error interno del servidor',
+          description: 'Server error',
           content: {
             'application/json': {
               schema: t.Object({

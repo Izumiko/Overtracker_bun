@@ -1,3 +1,8 @@
+/**
+ * @file swagger-schemas.ts
+ * @description Swagger schemas
+ */
+
 export const userSchema = {
   type: 'object',
   properties: {

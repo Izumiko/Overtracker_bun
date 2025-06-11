@@ -1,3 +1,8 @@
+/**
+ * @file elysia.d.ts
+ * @description Elysia types
+ */
+
 declare module 'elysia' {
   import type { JWT } from '@elysiajs/jwt'
 

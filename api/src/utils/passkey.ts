@@ -1,10 +1,15 @@
+/**
+ * @file passkey.ts
+ * @description Passkey utils
+ */
+
 import { randomUUID, createHash } from 'crypto'
 import { db } from '../db'
 import { users } from '../db/schema/users'
 import { eq } from 'drizzle-orm'
 
-// Expresión regular para validar el formato del passkey
-// Debe contener exactamente 32 caracteres hexadecimales
+// Regular expression to validate the format of the passkey
+// Must contain exactly 32 hexadecimal characters
 const PASSKEY_REGEX = /^[a-f0-9]{32}$/
 
 export function isValidPasskey(passkey: string): boolean {
@@ -12,12 +17,12 @@ export function isValidPasskey(passkey: string): boolean {
 }
 
 export async function generateUniquePasskey(): Promise<string> {
-  const maxAttempts = 10 // Evitar bucle infinito en caso de error
+  const maxAttempts = 10 // Avoid infinite loop in case of error
   let attempts = 0
 
   while (attempts < maxAttempts) {
     try {
-      // Generar passkey aleatorio inicial usando charset específico
+      // Generate random initial passkey using specific charset
       const charset = 'abcdefghijklmnopqrstuvwxyz0123456789'
       let initialPasskey = ''
       for (let i = 0; i < 32; i++) {
@@ -25,23 +30,23 @@ export async function generateUniquePasskey(): Promise<string> {
         initialPasskey += charset[randomIndex]
       }
 
-      // Añadir componentes únicos para garantizar irrepetibilidad
+      // Add unique components to ensure uniqueness
       const uniqueComponent = `${randomUUID()}-${Date.now()}`
       const combined = `${initialPasskey}-${uniqueComponent}`
 
-      // Hashear la combinación con SHA-256
+      // Hash the combination with SHA-256
       const passkey = createHash('sha256')
         .update(combined)
         .digest('hex')
         .slice(0, 32)
 
-      // Verificar el formato
+      // Verify the format
       if (!isValidPasskey(passkey)) {
         attempts++
         continue
       }
 
-      // Verificar que no exista en la base de datos
+      // Verify that it does not exist in the database
       const existingUser = await db
         .select({ id: users.id })
         .from(users)
@@ -54,20 +59,20 @@ export async function generateUniquePasskey(): Promise<string> {
 
       attempts++
     } catch (error) {
-      console.error('Error generando passkey:', error)
+      console.error('Error generating passkey:', error)
       attempts++
     }
   }
 
-  throw new Error('No se pudo generar un passkey único después de varios intentos')
+  throw new Error('Could not generate a unique passkey after several attempts')
 }
 
-// Función para formatear el passkey para mostrar (grupos de 4 caracteres)
+// Function to format the passkey for display (groups of 4 characters)
 export function formatPasskey(passkey: string): string {
   return passkey.replace(/(.{4})/g, '$1-').slice(0, -1)
 }
 
-// Función para limpiar el formato del passkey
+// Function to clean the format of the passkey
 export function cleanPasskey(passkey: string): string {
   return passkey.replace(/[^a-f0-9]/g, '')
 } 

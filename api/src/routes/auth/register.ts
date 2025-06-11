@@ -1,3 +1,8 @@
+/**
+ * @file register.ts
+ * @description Register route
+ */
+
 import { Elysia, t } from 'elysia'
 import { db } from '../../db'
 import { users } from '../../db/schema/users'
@@ -12,7 +17,7 @@ export const register = new Elysia()
     const { username, email, password } = body
 
     try {
-      // Verificar si el usuario ya existe
+      // Verify if the user already exists
       const existingUser = await db
         .select()
         .from(users)
@@ -32,12 +37,12 @@ export const register = new Elysia()
         }
       }
 
-      // Generar hash de la contraseña
+      // Generate password hash
       // const salt = await bcrypt.genSalt(10)
       // const password_hash = await bcrypt.hash(password, salt)
       const password_hash = await Bun.password.hash(password, {algorithm: 'bcrypt'})
 
-      // Generar passkey único
+      // Generate unique passkey
       const passkey = await generateUniquePasskey()
       
       if (!isValidPasskey(passkey)) {
@@ -48,7 +53,7 @@ export const register = new Elysia()
         }
       }
 
-      // Insertar nuevo usuario
+      // Insert new user
       const [newUser] = await db
         .insert(users)
         .values({
@@ -77,7 +82,7 @@ export const register = new Elysia()
       }
 
     } catch (error) {
-      console.error('Error al registrar usuario:', error)
+      console.error('Register user error:', error)
       set.status = 500
       return {
         success: false,
@@ -92,8 +97,8 @@ export const register = new Elysia()
     }),
     detail: {
       tags: ['Auth'],
-      summary: 'Registrar un nuevo usuario',
-      description: 'Crea una nueva cuenta de usuario en el sistema',
+      summary: 'Register a new user',
+      description: 'Creates a new user account in the system',
       responses: {
         200: {
           description: 'Usuario registrado correctamente',
@@ -111,7 +116,7 @@ export const register = new Elysia()
           }
         },
         400: {
-          description: 'Datos de registro inválidos',
+          description: 'Invalid registration data',
           content: {
             'application/json': {
               schema: errorSchema
@@ -119,7 +124,7 @@ export const register = new Elysia()
           }
         },
         500: {
-          description: 'Error del servidor',
+          description: 'Server error',
           content: {
             'application/json': {
               schema: errorSchema
