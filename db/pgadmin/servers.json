@@ -1,0 +1,15 @@
+{
+    "Servers": {
+      "1": {
+        "Name": "TrackerDB",
+        "Group": "Servers",
+        "Host": "postgres",
+        "Port": 5432,
+        "MaintenanceDB": "tracker",
+        "Username": "tracker_user",
+        "SSLMode": "prefer",
+        "Password": "tracker_password"
+      }
+    }
+  }
+  

@@ -5,7 +5,8 @@ import type { NextRequest } from 'next/server'
 const protectedRoutes = [
   '/dashboard',
   '/profile',
-  '/admin'
+  '/admin',
+  '/torrents'
 ]
 
 // Rutas solo para usuarios no autenticados

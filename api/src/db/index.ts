@@ -38,9 +38,9 @@ export async function initializeDatabase() {
     `
 
     // 3. Drop the table if it exists (during development)
-    await migrationClient`
-      DROP TABLE IF EXISTS users CASCADE
-    `
+    //await migrationClient`
+      //DROP TABLE IF EXISTS users CASCADE
+   // `
 
     // 4. Create users table with the new schema
     await migrationClient`
